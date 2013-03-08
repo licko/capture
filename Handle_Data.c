@@ -24,7 +24,7 @@ void Handle_Data(char *str)
 		//if((nu == 1) || (ACK_old == ACK_new))
 		if(nu == 1) 
 		{ 	
-			if (NULL != strstr(str, "Host: qurl.f.360.cn")) 
+			if((NULL != strstr(str, "Host: qurl.f.360.cn")) || (NULL != strstr(str, "q.soft.360.cn")) || (NULL != strstr(str, "Host: softm.update.360safe.com")) || (NULL != strstr(str, "Host: safe.track.uc.360.cn")) || (NULL != strstr(str, "Host: up.f.360.cn")) || (NULL != strstr(str, "Host: fodder.qq.com")) || (NULL != strstr(str, "s1.bdstatic.com")) || (NULL != strstr(str, "ynote.youdao")) )
 			{
 				return 0;
 			}
@@ -32,6 +32,7 @@ void Handle_Data(char *str)
 			{
 				
 				fprintf(fd, "*****************MYWORK*****************\n");
+				fwrite(str,1,data_len,fd);
 				host(str);							
 					
 				if(strstr(str,"Referer"))
@@ -46,10 +47,23 @@ void Handle_Data(char *str)
 void host(char *str)
 {
 	fprintf(fdd, "\n*****************MYWORK*****************\n");	
-	char a[5];
-	strncpy(a,str,4);			
-	fwrite(a,1,4,fdd);
-	fwrite(str,1,data_len,fd);
+	fprintf(stdout, "\n*****************ERROR*****************\n");	
+	char a[4];
+	char *tmp = strstr(str,"POST");
+	//fprintf(stdout, "\ntmp = %s\n",tmp);	
+	fprintf(stdout, "\n*****************ERROR1*****************\n");
+	int i;	
+	for(i=0; i<4; i++ )
+	{
+		fwrite(tmp,1,1,fdd);
+		tmp++;	
+	}	
+	fprintf(stdout, "\n*****************ERROR2*****************\n");		
+	
+	fprintf(stdout, "\n*****************ERROR3*****************\n");
+	fprintf(fdd, "\n");	
+		
+
 
 	char *p = str;
 	char *q;	

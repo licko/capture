@@ -1,3 +1,4 @@
+all : test clean1
 test : Capture.o Handle_Ethernet.o Handle_Ip.o Handle_Tcp.o   Handle_Data.o Search.o 
 	gcc -o test Capture.o Handle_Ethernet.o Handle_Ip.o Handle_Tcp.o   Search.o Handle_Data.o -lpcap 
 Capture.o : Capture.c capture.h 
@@ -12,7 +13,9 @@ Handle_Data.o : Handle_Data.c capture.h
 	gcc -c Handle_Data.c 
 Search.o : Search.c capture.h 
 	gcc -c Search.c 
-clean :
-	rm -rf temp.txt Capture.o Handle_Ethernet.o Handle_Ip.o Handle_Tcp.o Handle_Data.o  test Search.o data.txt 
-
-
+clean1 :
+	rm -rf  Capture.o Handle_Ethernet.o Handle_Ip.o Handle_Tcp.o Handle_Data.o   Search.o  
+clean:
+	rm -rf temp.txt  data.txt 
+cleanall:
+	rm -rf temp.txt  data.txt  test

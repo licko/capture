@@ -6,13 +6,15 @@
  *******************************************************/
 #include "capture.h"
 int Search(char *str)
-{
+{	
+	char *tmp = str;
 		char *p = NULL ;
         char *q = NULL ;
-        p = strstr(str, "GET");
-        q = strstr(str, "POST");
+	char *o;
+       // p = strstr(tmp, "post");
+        q = strstr(tmp, "POST");
  
-        if((NULL != p) || (NULL != q) )
+        if(NULL != q)
          {
 			return 1;
          }
