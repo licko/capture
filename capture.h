@@ -9,6 +9,7 @@
 #include <pcap.h>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
+#include <netinet/udp.h>
 #include <net/ethernet.h>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -16,15 +17,19 @@
 #include <stdlib.h>
 
 extern pcap_t* descr;
- void Handle_Ethernet(u_char *argument,const struct pcap_pkthdr * packet_header,const u_char * packet_content);
-void Handle_Ip(u_char *argument,const struct pcap_pkthdr * packet_header,const u_char * packet_content);
-void Handle_Tcp(u_char *argument,const struct pcap_pkthdr * packet_header,const u_char * packet_content);
-void Handle_Data(char *str);
-void My_CallBack(u_char *useless,const struct pcap_pkthdr* pkthdr,
+ void handle_ethernet(u_char *argument,const struct pcap_pkthdr * packet_header,const u_char * packet_content);
+void handle_ip(u_char *argument,const struct pcap_pkthdr * packet_header,const u_char * packet_content);
+void handle_tcp(u_char *argument,const struct pcap_pkthdr * packet_header,const u_char * packet_content);
+void handle_udp(u_char *argument,const struct pcap_pkthdr * packet_header,const u_char * packet_content);
+void handle_data(char *str);
+void handle_udp_data(char *str);
+
+void my_callback(u_char *useless,const struct pcap_pkthdr* pkthdr,
                                              const u_char *packet);
-int Search(char *str);
+int search(char *str);
 extern unsigned long long ACK_new;
 extern unsigned long long ACK_old;
 extern  FILE *fd;
 extern char packet_buf[1600];
 extern int data_len;
+extern int packet_number;
