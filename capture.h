@@ -33,3 +33,16 @@ extern  FILE *fd;
 extern char packet_buf[1600];
 extern int data_len;
 extern int packet_number;
+
+typedef struct 
+{
+	unsigned char smac[6];
+	unsigned char dmac[6];
+	unsigned char sip[16];
+	unsigned char dip[16];
+	unsigned long sport;
+	unsigned long dport;	
+
+
+}pakt;
+extern pakt packet;

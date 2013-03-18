@@ -5,6 +5,7 @@
  * 备注：自由软件，主要用于学习、交流、共享。
  *******************************************************/
 #include "capture.h"
+pakt packet;
 void handle_ethernet(u_char *argument,const struct pcap_pkthdr * packet_header,const u_char * packet_content)
 {
         u_short ethernet_type;
@@ -28,10 +29,11 @@ void handle_ethernet(u_char *argument,const struct pcap_pkthdr * packet_header,c
         printf("Mac Source Address is:");
         mac_string=ethernet_protocol->ether_shost;
         printf("%02x:%02x:%02x:%02x:%02x:%02x\n",*mac_string,*(mac_string+1),*(mac_string+2),*(mac_string+3),*(mac_string+4),*(mac_string+5));
+	strcpy(packet.smac, mac_string);
         printf("Mac Destination Address is:");
         mac_string=ethernet_protocol->ether_dhost;
         printf("%02x:%02x:%02x:%02x:%02x:%02x\n",*mac_string,*(mac_string+1),*(mac_string+2),*(mac_string+3),*(mac_string+4),*(mac_string+5));
-
+	strcpy(packet.dmac, mac_string);
         switch(ethernet_type)
         {
                 case 0x0800:handle_ip(argument,packet_header,packet_content);

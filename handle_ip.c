@@ -18,7 +18,7 @@ void handle_ip(u_char *argument,const struct pcap_pkthdr * packet_header,const u
         //获得IP协议数据内容,应该跳过以太网协议头
         ip_protocol = (struct ip *)(packet_content+14);
 	char *sip = inet_ntoa(ip_protocol->ip_src); 
-	if(0 !=strcmp(sip,"192.168.1.168"))
+	if(0 !=strcmp(sip,"192.168.1.166"))
 	{
 		return 0;
 	}
@@ -57,11 +57,19 @@ void handle_ip(u_char *argument,const struct pcap_pkthdr * packet_header,const u
 	{	printf("The Transport Layer Protocol is ***\n");
 	}
 		fprintf(fd,"Header checksum:%d\n",checksum);
-        fprintf(fd,"Source address     :%s\n",inet_ntoa(ip_protocol->ip_src)); 
-		fprintf(fd,"Destination address:%s\n",inet_ntoa(ip_protocol->ip_dst));
+
+	
+	
+       // fprintf(fd,"Source address     :%s\n",inet_ntoa(ip_protocol->ip_src));
+	fprintf(fd,"Source address     :%s\n",sip);
+		strcpy(packet.sip,sip);
+		//fprintf(fd,"Destination address:%s\n",inet_ntoa(ip_protocol->ip_dst));
+		char *dip = inet_ntoa(ip_protocol->ip_dst);
+		fprintf(fd,"Destination address:%s\n",dip);
+		strcpy(packet.dip,dip);
         switch(ip_protocol->ip_p)
         {
-               	//case 6:handle_tcp(argument,packet_header,packet_content);break;
+               	case 6:handle_tcp(argument,packet_header,packet_content);break;
                 case 17:handle_udp(argument,packet_header,packet_content);break;
                 default:break;
         }

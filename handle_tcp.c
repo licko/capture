@@ -22,6 +22,8 @@ void handle_tcp(u_char *argument,const struct pcap_pkthdr * packet_header,const 
         tcp_protocol = (struct tcphdr*)(packet_content+14+20);
         source_port = ntohs(tcp_protocol->source);
         destination_port = ntohs(tcp_protocol->dest);
+	packet.sport = source_port;
+	packet.dport = destination_port;
         header_length = tcp_protocol->doff * 4;
         sequence = ntohl(tcp_protocol->seq);
         acknowledgement = ntohl(tcp_protocol->ack_seq);

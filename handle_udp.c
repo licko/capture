@@ -23,6 +23,8 @@ void handle_udp(u_char *argument,const struct pcap_pkthdr * packet_header,const 
 		fprintf(fd,"------------------UDP Protocol(Transport Layer)------------------\n");
 		fprintf(fd,"Source Port:%d\n",sport);
 		fprintf(fd,"Destination Port:%d\n",dport);
+		packet.sport = sport;
+		packet.dport = dport;
 		fprintf(fd,"udp length:%u\n",ulen);
 		fprintf(fd,"udp checksum:%d\n",sum);
 		fprintf(fd,"\n");

@@ -20,12 +20,18 @@ void handle_udp_data(char *str)
 	
 		int nu = judgment(str);
 			
-		if(nu == 1) 
+		//if(nu == 1) 
 		{ 	
 			if(data_len > 0)
 			{
 				
 				fprintf(fdd, "\n*****************MYWORK*****************\n");				fprintf(fdd,"The %d packet is captured.\n",packet_number);
+				fprintf(fdd,"smac = %s\n",packet.smac);
+				fprintf(fdd,"dmac = %s\n",packet.dmac);
+				fprintf(fdd,"sip  = %s\n",packet.sip);
+				fprintf(fdd,"dip  = %s\n",packet.dip);
+				fprintf(fdd,"sport= %d\n",packet.sport);
+				fprintf(fdd,"dport= %d\n",packet.dport);
 				char *p = str;
 				while(data_len--)
 				{
@@ -33,6 +39,7 @@ void handle_udp_data(char *str)
 					p++;
 					//fwrite(str,1,data_len,fdd);
 				}
+				
 				fprintf(fdd, "\n");
 			}
 		}
@@ -44,14 +51,17 @@ int judgment(char *str)
 	char *tmp = str;
 	if(32 == *tmp)
 	{
-		tmp = tmp + 9;
-		if((*tmp == 0) && (*(tmp+1) == 0) && (*(tmp+2) == 0) && (*(tmp+3) == 0) && (*(tmp+4) == 1))
-		{
-			tmp = tmp + 5;
-			if((*tmp == 22) && (*(tmp+1) == 3) && (*(tmp+2) == 1) && (*(tmp+5) == 1))
-			return 1;
-		}
+			tmp = tmp + 9;
+			if((*tmp == 0) && (*(tmp+1) == 0) && (*(tmp+2) == 0) 
+							&& (*(tmp+3) == 0) && (*(tmp+4) == 1))
+			{
+				tmp = tmp + 5;
+				if((*tmp == 22) && (*(tmp+1) == 3) 
+					&& (*(tmp+2) == 1) && (*(tmp+5) == 1))
+				return 1;
+			}
 
+		
 	}
 
 
