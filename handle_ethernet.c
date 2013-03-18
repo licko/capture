@@ -11,7 +11,10 @@ void handle_ethernet(u_char *argument,const struct pcap_pkthdr * packet_header,c
         u_short ethernet_type;
         struct ether_header * ethernet_protocol;
         u_char * mac_string;
-         
+        memset(packet.smac, 0, 18);
+	memset(packet.dmac, 0, 18);
+	memset(packet.sip, 0, 16);
+	memset(packet.dip, 0, 16);
         printf("***********************************************\n");
         printf("The %d packet is captured.\n",packet_number);
         printf("----- Ethernet Protocol (Link Layer) --------\n");
@@ -29,11 +32,13 @@ void handle_ethernet(u_char *argument,const struct pcap_pkthdr * packet_header,c
         printf("Mac Source Address is:");
         mac_string=ethernet_protocol->ether_shost;
         printf("%02x:%02x:%02x:%02x:%02x:%02x\n",*mac_string,*(mac_string+1),*(mac_string+2),*(mac_string+3),*(mac_string+4),*(mac_string+5));
-	strcpy(packet.smac, mac_string);
+	sprintf(packet.smac, "%02x:%02x:%02x:%02x:%02x:%02x",*mac_string,*(mac_string+1),*(mac_string+2),*(mac_string+3),*(mac_string+4),*(mac_string+5));
+	//strcpy(packet.smac, mac_string);
         printf("Mac Destination Address is:");
         mac_string=ethernet_protocol->ether_dhost;
         printf("%02x:%02x:%02x:%02x:%02x:%02x\n",*mac_string,*(mac_string+1),*(mac_string+2),*(mac_string+3),*(mac_string+4),*(mac_string+5));
-	strcpy(packet.dmac, mac_string);
+	sprintf(packet.dmac, "%02x:%02x:%02x:%02x:%02x:%02x",*mac_string,*(mac_string+1),*(mac_string+2),*(mac_string+3),*(mac_string+4),*(mac_string+5));
+	//strcpy(packet.dmac, mac_string);
         switch(ethernet_type)
         {
                 case 0x0800:handle_ip(argument,packet_header,packet_content);

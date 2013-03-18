@@ -36,8 +36,8 @@ extern int packet_number;
 
 typedef struct 
 {
-	unsigned char smac[6];
-	unsigned char dmac[6];
+	unsigned char smac[18];
+	unsigned char dmac[18];
 	unsigned char sip[16];
 	unsigned char dip[16];
 	unsigned long sport;

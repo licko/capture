@@ -5,14 +5,18 @@
  * 备注：自由软件，主要用于学习、交流、共享。
  *******************************************************/
 #include "capture.h"
+#include <mysql/mysql.h>
 FILE * fdd;
 char * ttt;
+char hostt[100];
 void host(char *str);
 void referer(char *str);
 void post(char *str);
+void insert_mysql();
 void handle_data(char *str)
 {
 		fdd = fopen("data.txt","ab");
+	memset(hostt, 0, 100);
           if(NULL == fdd)
           {
               perror("fopen fdd:");
@@ -22,7 +26,7 @@ void handle_data(char *str)
 		int nu = search(str);
 			
 		//if((nu == 1) || (ACK_old == ACK_new))
-		//if(nu == 1) 
+		if(nu == 1) 
 		{ 	
 			if((NULL != strstr(str, "Host: qurl.f.360.cn")) || (NULL != strstr(str, "q.soft.360.cn")) || (NULL != strstr(str, "Host: softm.update.360safe.com")) || (NULL != strstr(str, "Host: safe.track.uc.360.cn")) || (NULL != strstr(str, "Host: up.f.360.cn")) || (NULL != strstr(str, "Host: fodder.qq.com")) || (NULL != strstr(str, "s1.bdstatic.com")) || (NULL != strstr(str, "ynote.youdao")) )
 			{
@@ -31,9 +35,9 @@ void handle_data(char *str)
 			if(data_len > 0)
 			{
 				
-				fprintf(fdd, "\nsmac = %02x:%02x:%02x:%02x:%02x:%02x\n",packet.smac[0], packet.smac[1], packet.smac[2], packet.smac[3], packet.smac[4], packet.smac[5]);
-				fprintf(fdd, "dmac = %02x:%02x:%02x:%02x:%02x:%02x\n",packet.dmac[0], packet.dmac[1], packet.dmac[2], packet.dmac[3], packet.dmac[4], packet.dmac[5]);
 				
+				fprintf(fdd,"smac = %s\n",packet.smac);
+				fprintf(fdd,"dmac = %s\n",packet.dmac);
 				fprintf(fdd,"sip  = %s\n",packet.sip);
 				fprintf(fdd,"dip  = %s\n",packet.dip);
 				fprintf(fdd,"sport= %d\n",packet.sport);
@@ -51,6 +55,7 @@ void handle_data(char *str)
 				}
 			
 			}
+				insert_mysql();
 				ACK_old = ACK_new;
 		}
 		fclose(fdd);
@@ -84,7 +89,8 @@ void host(char *str)
 	if(p != NULL) 
 	{			
 		*p = '\0';	              	      		
-			
+		//strcpy(hostt,q);
+		sprintf(hostt, "%s", q);	
 		int len_11 = strlen(q); 
 		fwrite(q,1,len_11,fdd);
 		fprintf(fdd, "\n");
@@ -107,6 +113,44 @@ void referer(char *str)
 		fwrite(q,1,len_11,fdd);
 	}
 	
+}
+void insert_mysql()
+{   
+	MYSQL *conn_ptr; 
+    conn_ptr = mysql_init(NULL);
+ 
+    if (!conn_ptr)    
+    {
+        fprintf(stderr, "mysql_init failed\n");
+        exit (0);
+    }
+    
+    conn_ptr = mysql_real_connect(conn_ptr, "192.168.1.176", 
+                        "licko", "licko", "packet", 0, NULL, 0);    
+    
+    if (conn_ptr)
+    {
+        printf("Connection success\n");
+    }
+    else
+    {
+        printf("Connection failed\n");
+    }
+	char *str[100];
+    sprintf(str,"insert into packet values ('', '%s', '%s', '%s', '%s', %d, %d, '%s')",packet.smac, packet.dmac, packet.sip, packet.dip, packet.sport, packet.dport, hostt);
+   printf("*&&&&&&&&&&&&&&&&&%s\n",hostt);
+    if(mysql_query(conn_ptr, str)!=0)
+	 
+     {
+       printf("insert data error");
+         
+     }
+	else
+     {
+          printf("insert data success");
+     }
+   
+    mysql_close(conn_ptr);
 }
 
 	

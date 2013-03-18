@@ -50,12 +50,6 @@ void handle_ip(u_char *argument,const struct pcap_pkthdr * packet_header,const u
                 case 1:fprintf(fd,"The Transport Layer Protocol is ICMP\n");break;
                 default:printf("The Transport Layer Protocol is ***\n");break;
         }*/
-	if(ip_protocol->ip_p == 17)
-	{	printf("The Transport Layer Protocol is UDP\n");
-	}
-	else
-	{	printf("The Transport Layer Protocol is ***\n");
-	}
 		fprintf(fd,"Header checksum:%d\n",checksum);
 
 	

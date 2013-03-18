@@ -1,6 +1,6 @@
 all : test clean1
 test : capture.o handle_ethernet.o handle_ip.o handle_tcp.o  handle_udp.o handle_data.o handle_udp_data.o search.o 
-	gcc -o test capture.o handle_ethernet.o handle_ip.o handle_tcp.o   search.o handle_data.o -lpcap handle_udp.o handle_udp_data.o 
+	gcc -o test capture.o handle_ethernet.o handle_ip.o handle_tcp.o   search.o handle_data.o -lpcap handle_udp.o handle_udp_data.o -I/usr/include/mysql  -L/usr/lib/mysql -lmysqlclient
 capture.o : capture.c capture.h 
 	gcc -c capture.c 
 handle_ethernet.o : handle_ethernet.c capture.h 
@@ -12,7 +12,7 @@ handle_tcp.o : handle_tcp.c capture.h
 handle_udp.o : handle_udp.c capture.h 
 	gcc -c handle_udp.c 
 handle_data.o : handle_data.c capture.h 
-	gcc -c handle_data.c 
+	gcc -c handle_data.c  -I/usr/include/mysql  -L/usr/lib/mysql -lmysqlclient 
 search.o : search.c capture.h 
 	gcc -c search.c 
 clean1 :

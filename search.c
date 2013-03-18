@@ -12,7 +12,7 @@ int search(char *str)
         char *q = NULL ;
 	char *o;
        // p = strstr(tmp, "post");
-        q = strstr(tmp, "POST");
+        q = strstr(tmp, "GET");
  
         if(NULL != q)
          {

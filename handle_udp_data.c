@@ -7,6 +7,7 @@
 #include "capture.h"
 FILE * fdd;
 char * ttt;
+void insert_mysql();
 int judgment(char *str);
 void handle_udp_data(char *str)
 {
@@ -39,7 +40,7 @@ void handle_udp_data(char *str)
 					p++;
 					//fwrite(str,1,data_len,fdd);
 				}
-				
+				insert_mysql();
 				fprintf(fdd, "\n");
 			}
 		}
@@ -68,6 +69,43 @@ int judgment(char *str)
 	return 0;
 
 
+}
+void insert_mysql()
+{   
+	MYSQL *conn_ptr; 
+    conn_ptr = mysql_init(NULL);
+ 
+    if (!conn_ptr)    
+    {
+        fprintf(stderr, "mysql_init failed\n");
+        exit (0);
+    }
+    
+    conn_ptr = mysql_real_connect(conn_ptr, "192.168.1.176", 
+                        "licko", "licko", "packet", 0, NULL, 0);    
+    
+    if (conn_ptr)
+    {
+        printf("Connection success\n");
+    }
+    else
+    {
+        printf("Connection failed\n");
+    }
+	char *str[100];
+    sprintf(str,"insert into packet values ('', '%s', '%s', '%s', '%s', %d, %d)",packet.smac, packet.dmac, packet.sip, packet.dip, packet.sport, packet.dport);
+    if(mysql_query(conn_ptr, str)!=0)
+	 
+     {
+       printf("insert data error");
+         
+     }
+	else
+     {
+          printf("insert data success");
+     }
+   
+    mysql_close(conn_ptr);
 }
 	
 	
